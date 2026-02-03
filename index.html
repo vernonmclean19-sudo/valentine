@@ -1,198 +1,235 @@
 <!DOCTYPE html>
 <html lang="af">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wil jy my Valentyn wees?</title>
+  <meta charset="UTF-8">
+  <title>Aimee 💘 Valentyn</title>
 
-<style>
-body {
-    height: 100vh;
-    margin: 0;
-    background: linear-gradient(135deg, #ff4d6d, #ff758f);
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #ffebf0;
+      animation: none;
+    }
 
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    width: 320px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
+    body.flash {
+      animation: redbullFlash 0.6s infinite;
+    }
 
-p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
+    @keyframes redbullFlash {
+      0%   { background: #001a4d; }
+      50%  { background: #c4001a; }
+      100% { background: #001a4d; }
+    }
 
-button {
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-}
+    .screen {
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 330px;
+      z-index: 2;
+    }
 
-#yesBtn {
-    background: #28a745;
-    color: white;
-}
+    .active {
+      display: block;
+    }
 
-#noBtn {
-    background: #dc3545;
-    color: white;
-    position: fixed;
-    left: 50%;
-    top: 70%;
-    transform: translateX(-50%);
-    z-index: 1;
-}
+    h1 {
+      margin-bottom: 10px;
+    }
 
-.celebration {
-    display: none;
-    text-align: center;
-}
+    #countdown {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-.celebration img {
-    width: 100%;
-    border-radius: 15px;
-    margin-top: 15px;
-}
+    #message {
+      min-height: 40px;
+      margin-bottom: 20px;
+    }
 
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-</style>
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    #yesBtn.shake {
+      animation: shake 0.4s infinite;
+    }
+
+    #noBtn {
+      background: #ccc;
+    }
+
+    @keyframes shake {
+      0% { transform: scale(var(--s)) translate(0); }
+      25% { transform: scale(var(--s)) translate(-4px, 4px); }
+      50% { transform: scale(var(--s)) translate(4px, -4px); }
+      75% { transform: scale(var(--s)) translate(-4px, -4px); }
+      100% { transform: scale(var(--s)) translate(0); }
+    }
+
+    #celebration {
+      background: black;
+      color: white;
+    }
+
+    #celebration img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
 </head>
-
 <body>
 
 <canvas id="confetti"></canvas>
 
-<div class="card" id="card">
-    <h1>💘</h1>
-    <p id="question">Wil jy my Valentyn wees?</p>
-    <button id="yesBtn">Ja 💖</button>
+<!-- SCREEN 1 -->
+<div class="screen active" id="questionScreen">
+  <h1>Aimee… 💖</h1>
+  <h2>Wil jy my Valentine wees?</h2>
+
+  <div id="countdown"></div>
+  <div id="message">Wees eerlik Aimee 😌</div>
+
+  <div class="buttons">
+    <button id="yesBtn" onclick="yesClicked()">JA 💖</button>
+    <button id="noBtn" onclick="noClicked()">NEE 🙄</button>
+  </div>
 </div>
 
-<button id="noBtn">Nee 🙄</button>
+<!-- SCREEN 2 -->
+<div class="screen" id="celebration">
+  <h1>DIT IS AMPTELIK 🏆❤️</h1>
+  <p>Aimee HET JA GESÊ</p>
 
-<div class="card celebration" id="celebration">
-    <h1>🎉 JAAAA! 🎉</h1>
-    <p>Ek is SO bly 😭❤️ Nou is dit amptelik!</p>
-    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Viering">
+  <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+       alt="Max Verstappen celebrating">
 </div>
+
+<audio id="engineSound">
+  <source src="https://www.soundjay.com/transportation/formula-1-race-car-01.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const question = document.getElementById("question");
-const card = document.getElementById("card");
-const celebration = document.getElementById("celebration");
+  let noCount = 0;
+  let scale = 1;
+  const yesBtn = document.getElementById("yesBtn");
 
-const sekerVrae = [
-    "Is jy seker? 🤨",
-    "Nee man, dink gou 😐",
-    "Is jy rêrig seker hiervan? 👀",
-    "Ag asseblief 😅",
-    "Jy speel nou, né? 😭",
-    "Kom nou, net sê ja 🥺",
-    "Ek belowe ek is nice 😔",
-    "Dis actually seer nou 😤",
-    "My hart vat nie meer nie 💔",
-    "Okay wow… dis koud 😢",
-    "Eish… hierdie is pynlik 😞",
-    "Bruh… regtig? 😭"
-];
+  const messages = [
+    "Aimee… kyk hoe groei die JA 😏",
+    "NEE maak dit net groter 👀",
+    "Dis nou al verdag 🤭",
+    "Okay Aimee dis GROOT 😭",
+    "Jy help nie jou saak nie 😂",
+    "Dis nou onkeerbaar 💖",
+    "Net druk die JA Aimee 😌"
+  ];
 
-let vraagIndex = 0;
+  function noClicked() {
+    noCount++;
+    scale += 0.2;
 
-// Move function (cannot freeze)
-function moveNoButton() {
-    // Always change text
-    question.textContent = sekerVrae[vraagIndex];
-    vraagIndex = (vraagIndex + 1) % sekerVrae.length;
+    yesBtn.style.setProperty("--s", scale);
+    yesBtn.style.transform = `scale(${scale})`;
 
-    const cardRect = card.getBoundingClientRect();
-    const btnW = noBtn.offsetWidth;
-    const btnH = noBtn.offsetHeight;
-
-    let x, y;
-
-    do {
-        x = Math.random() * (window.innerWidth - btnW);
-        y = Math.random() * (window.innerHeight - btnH);
-    } while (
-        x + btnW > cardRect.left &&
-        x < cardRect.right &&
-        y + btnH > cardRect.top &&
-        y < cardRect.bottom
-    );
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-}
-
-// Desktop
-noBtn.addEventListener("mouseenter", moveNoButton);
-
-// Mobile
-noBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    moveNoButton();
-});
-
-// Yes button
-yesBtn.addEventListener("click", () => {
-    card.style.display = "none";
-    noBtn.style.display = "none";
-    celebration.style.display = "block";
-    startConfetti();
-});
-
-// Confetti
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let confetti = [];
-
-function startConfetti() {
-    for (let i = 0; i < 300; i++) {
-        confetti.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: Math.random() * 6 + 2,
-            d: Math.random() * 5 + 1
-        });
+    if (scale >= 2) {
+      yesBtn.classList.add("shake");
     }
-    animateConfetti();
-}
 
-function animateConfetti() {
+    document.getElementById("message").innerText =
+      messages[Math.min(noCount - 1, messages.length - 1)];
+  }
+
+  function yesClicked() {
+    document.getElementById("questionScreen").classList.remove("active");
+    document.getElementById("celebration").classList.add("active");
+
+    document.body.classList.add("flash");
+    document.getElementById("engineSound").play();
+    startConfetti();
+  }
+
+  /* COUNTDOWN */
+  const targetDate = new Date("February 14, 2026 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").innerText =
+      `Valentyn oor: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+
+  /* CONFETTI */
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let confetti = [];
+
+  function startConfetti() {
+    for (let i = 0; i < 200; i++) {
+      confetti.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 2,
+        d: Math.random() * 5 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`
+      });
+    }
+    requestAnimationFrame(drawConfetti);
+  }
+
+  function drawConfetti() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    confetti.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        ctx.fill();
-        c.y += c.d;
-        if (c.y > canvas.height) c.y = 0;
+    confetti.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.y += p.d;
+      if (p.y > canvas.height) p.y = 0;
     });
-    requestAnimationFrame(animateConfetti);
-}
+    requestAnimationFrame(drawConfetti);
+  }
 </script>
 
 </body>
